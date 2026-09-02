@@ -2,6 +2,8 @@
 
 Aplikasi web manajemen peminjaman buku perpustakaan digital yang dibangun menggunakan framework **Laravel 11**, **Tailwind CSS**, dan **Vite**.
 
+> 📖 **[Baca Pembahasan Lengkap & Panduan Teknis (PEMBAHASAN_FULL.md)](./PEMBAHASAN_FULL.md)** — Dokumentasi detail mencakup konsep MVC, analisis kode file-per-file, relasi database, dan lifecycle request.
+
 ---
 
 ## 🛠️ Tech Stack & Kebutuhan Lingkungan (Environment)
