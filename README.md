@@ -1,58 +1,131 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📚 Sistem Peminjaman Perpustakaan Digital
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi web manajemen peminjaman buku perpustakaan digital yang dibangun menggunakan framework **Laravel 11**, **Tailwind CSS**, dan **Vite**.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 💻 Spesifikasi Perangkat & Environment Pengembangan
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Project ini dikembangkan dan diuji pada perangkat dengan spesifikasi berikut:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 🖥️ Spesifikasi Perangkat Keras (Laptop)
+| Komponen | Spesifikasi |
+| :--- | :--- |
+| **Model Perangkat** | HP Pavilion Gaming Laptop 15-dk2xxx |
+| **Processor** | 11th Gen Intel(R) Core(TM) i5-11300H @ 3.10GHz (4 Cores, 8 Threads) |
+| **RAM** | 16 GB DDR4 |
+| **Sistem Operasi** | Windows 11 Home Single Language (64-bit) |
 
-## Learning Laravel
+### 🛠️ Spesifikasi Perangkat Lunak & Tech Stack
+| Tool / Stack | Versi yang Digunakan |
+| :--- | :--- |
+| **Framework** | Laravel 11.x |
+| **PHP** | PHP 8.2+ (Teruji pada PHP 8.5.4) |
+| **Package Manager (PHP)** | Composer 2.9+ |
+| **Runtime (JS)** | Node.js v24.x & npm |
+| **Database Server** | MySQL / MariaDB (XAMPP - Port 3307 / Default 3306) |
+| **Build Tool & Styling** | Vite & Tailwind CSS |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 📋 Persyaratan Sistem Minimum
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Sebelum menjalankan project, pastikan perangkat Anda memiliki:
+- PHP >= 8.2 (dengan ekstensi `pdo_mysql`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`, `bcmath`)
+- Composer >= 2.x
+- Node.js >= 18.x & npm
+- MySQL / MariaDB Server (misal via XAMPP atau Laragon)
+- Web Browser modern (Google Chrome, Microsoft Edge, Firefox, dll)
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## 🚀 Panduan Penggunaan & Instalasi (How to Use / Run)
 
+Ikuti langkah-langkah berikut untuk menjalankan project di perangkat lokal:
+
+### 1. Clone Repository
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/lordbarry21/peminjamanperpus.git
+cd peminjamanperpus
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Install Dependensi PHP (Composer)
+```bash
+composer install
+```
 
-## Contributing
+### 3. Install Dependensi JavaScript (NPM)
+```bash
+npm install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 4. Konfigurasi Environment (`.env`)
+Salin file `.env.example` menjadi `.env`:
+```bash
+# Windows (PowerShell / CMD)
+copy .env.example .env
 
-## Code of Conduct
+# Atau Linux / Git Bash
+cp .env.example .env
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Buka file `.env` dan sesuaikan pengaturan database sesuai konfigurasi MySQL di komputer Anda:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3307          # Ubah ke 3306 jika menggunakan port default XAMPP
+DB_DATABASE=db_perpus_digital
+DB_USERNAME=root
+DB_PASSWORD=
 
-## Security Vulnerabilities
+SESSION_DRIVER=database
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 5. Buat Database & Nyalakan MySQL
+1. Buka **XAMPP Control Panel**.
+2. Klik tombol **Start** pada modul **MySQL**.
+3. Buat database baru bernama `db_perpus_digital` melalui **phpMyAdmin** (`http://localhost/phpmyadmin`) atau MySQL CLI.
 
-## License
+### 6. Generate Application Key & Jalankan Migrasi
+```bash
+# Generate App Key
+php artisan key:generate
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Jalankan migrasi database beserta data awal (seeder)
+php artisan migrate --seed
+```
+
+### 7. Jalankan Server Pengembangan
+Jalankan backend Laravel dan aset frontend Vite di dua terminal terpisah:
+
+**Terminal 1 (Laravel Server):**
+```bash
+php artisan serve
+```
+> Server akan berjalan di: `http://127.0.0.1:8000`
+
+**Terminal 2 (Vite Asset Bundler):**
+```bash
+npm run dev
+```
+
+---
+
+## 🌐 Akses Aplikasi
+
+Setelah kedua server berjalan, buka browser dan akses tautan berikut:
+- **URL Aplikasi**: [http://127.0.0.1:8000](http://127.0.0.1:8000)
+
+---
+
+## ✨ Fitur Utama
+- 🔐 **Autentikasi Pengguna**: Registrasi akun, Login, dan Logout.
+- 📖 **Manajemen Buku (CRUD)**: Tambah data buku, edit, hapus, dan lihat katalog.
+- 📑 **Peminjaman & Pengembalian**: Transaksi peminjaman buku perpustakaan.
+- 👤 **Profil Pengguna**: Manajemen data profil dan password akun.
+- 📱 **Responsif & Modern**: Tampilan antarmuka bersih menggunakan Tailwind CSS.
+
+---
+
+## 📄 Lisensi
+Project ini bersifat open-source di bawah lisensi [MIT License](LICENSE).
