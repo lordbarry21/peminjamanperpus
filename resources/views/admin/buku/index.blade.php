@@ -1,4 +1,6 @@
+{{-- Menggunakan Layout Induk 'layouts.app' bawaan Laravel Breeze --}}
 <x-app-layout>
+    {{-- Slot Header: Menampilkan judul pada navigasi atas --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Kelola Data Buku') }}
@@ -8,18 +10,22 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                
+                {{-- Flash Message: Menampilkan banner hijau jika Controller mengirim pesan sukses --}}
                 @if (session('success'))
                     <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
                         {{ session('success') }}
                     </div>
                 @endif
 
+                {{-- Tombol Navigasi ke Form Tambah Buku Baru --}}
                 <div class="mb-4">
                     <a href="{{ route('admin.buku.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">
                         + Tambah Buku Baru
                     </a>
                 </div>
 
+                {{-- Tabel Responsif Daftar Buku --}}
                 <div class="overflow-x-auto">
                     <table class="w-full border-collapse border border-gray-200">
                         <thead>
@@ -33,6 +39,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {{-- Looping Data Buku: @forelse otomatis menangani kondisi jika data kosong (@empty) --}}
                             @forelse ($bukus as $buku)
                                 <tr class="border-b hover:bg-gray-50">
                                     <td class="border p-3 font-semibold">{{ $buku->kode_buku }}</td>
@@ -41,7 +48,10 @@
                                     <td class="border p-3">{{ $buku->penerbit }}</td>
                                     <td class="border p-3 text-center">{{ $buku->stok }}</td>
                                     <td class="border p-3 text-center">
+                                        {{-- Tombol Edit: Mengarah ke route admin.buku.edit dengan parameter ID --}}
                                         <a href="{{ route('admin.buku.edit', $buku->id) }}" class="text-blue-600 hover:underline mr-3 font-medium">Edit</a>
+                                        
+                                        {{-- Form Hapus: Mengirim HTTP DELETE request dengan proteksi CSRF --}}
                                         <form action="{{ route('admin.buku.destroy', $buku->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku ini?')">
                                             @csrf
                                             @method('DELETE')

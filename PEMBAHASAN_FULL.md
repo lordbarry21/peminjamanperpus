@@ -5,12 +5,13 @@ Dokumen ini berisi dokumentasi mendalam, arsitektur sistem, struktur database, a
 ---
 
 ## 📑 Daftar Isi
+
 1. [Gambaran Umum Sistem](#1-gambaran-umum-sistem)
 2. [Konsep Arsitektur MVC (Model-View-Controller)](#2-konsep-arsitektur-mvc-model-view-controller)
 3. [Struktur Direktori Proyek](#3-struktur-direktori-proyek)
-4. [Struktur Database & Relasi Antar Tabel](#4-struktur-database--relasi-antar-tabel)
-5. [Sistem Autentikasi & Hak Akses (Multi-Role)](#5-sistem-autentikasi--hak-akses-multi-role)
-6. [Analisis File & Kode Inti (Code Walkthrough)](#6-analisis-file--kode-inti-code-walkthrough)
+4. [Struktur Database &amp; Relasi Antar Tabel](#4-struktur-database--relasi-antar-tabel)
+5. [Sistem Autentikasi &amp; Hak Akses (Multi-Role)](#5-sistem-autentikasi--hak-akses-multi-role)
+6. [Analisis File &amp; Kode Inti (Code Walkthrough)](#6-analisis-file--kode-inti-code-walkthrough)
    - [A. Model](#a-model-appmodels)
    - [B. Controller](#b-controller-apphttpcontrollers)
    - [C. Routing](#c-routing-routeswebphp)
@@ -26,6 +27,7 @@ Dokumen ini berisi dokumentasi mendalam, arsitektur sistem, struktur database, a
 Aplikasi ini adalah sistem berbasis web untuk mengotomatisasi proses pengelolaan data buku dan transaksi peminjaman buku pada perpustakaan sekolah/institusi.
 
 ### Peran Pengguna (User Roles):
+
 * **Admin (Petugas Perpustakaan)**: Memiliki hak penuh untuk mengelola master data buku (Tambah, Lihat, Ubah, Hapus) dan memantau operasional perpustakaan.
 * **User (Siswa / Anggota)**: Dapat mendaftar, login, melihat katalog buku yang tersedia, melakukan peminjaman buku, serta mengelola profil pribadi.
 
@@ -114,6 +116,7 @@ peminjamanperpus/
 Database proyek ini bernama **`db_perpus_digital`**. Terdiri dari 3 tabel utama yang saling berelasi:
 
 ### Diagram Relasi Tabel (Entity Relationship):
+
 ```
 ┌─────────────────────────┐             ┌─────────────────────────┐
 │          users          │             │          bukus          │
@@ -144,6 +147,7 @@ Database proyek ini bernama **`db_perpus_digital`**. Terdiri dari 3 tabel utama 
 ```
 
 ### Relasi Eloquent:
+
 * **User -> Peminjaman**: 1 User dapat memiliki banyak transaksi peminjaman (`hasMany`).
 * **Buku -> Peminjaman**: 1 Buku dapat dipinjam dalam banyak transaksi (`hasMany`).
 * **Peminjaman -> User & Buku**: Setiap baris peminjaman dimiliki oleh 1 user dan 1 buku (`belongsTo`).
@@ -165,7 +169,8 @@ Aplikasi membedakan hak akses berdasarkan kolom `role` pada tabel `users`.
 
 ### A. Model (`app/Models/`)
 
-#### 1. [Buku.php](file:///d:/Bari/buDinda%20belajar/peminjamanperpus/app/Models/Buku.php)
+#### 1. [Buku.php](<file:///d:/Bari/buDinda%20belajar/peminjamanperpus/app/Models/Buku.php>)
+
 ```php
 namespace App\Models;
 
@@ -175,7 +180,7 @@ use Illuminate\Database\Eloquent\Model;
 class Buku extends Model
 {
     use HasFactory;
-    
+  
     // guarded ['id'] mengizinkan semua kolom selain 'id' untuk diisi (Mass Assignment)
     protected $guarded = ['id'];
 
@@ -187,7 +192,8 @@ class Buku extends Model
 }
 ```
 
-#### 2. [Peminjaman.php](file:///d:/Bari/buDinda%20belajar/peminjamanperpus/app/Models/Peminjaman.php)
+#### 2. [Peminjaman.php](<file:///d:/Bari/buDinda%20belajar/peminjamanperpus/app/Models/Peminjaman.php>)
+
 ```php
 namespace App\Models;
 
@@ -219,7 +225,8 @@ class Peminjaman extends Model
 
 ### B. Controller (`app/Http/Controllers/`)
 
-#### [BukuController.php](file:///d:/Bari/buDinda%20belajar/peminjamanperpus/app/Http/Controllers/Admin/BukuController.php)
+#### [BukuController.php](<file:///d:/Bari/buDinda%20belajar/peminjamanperpus/app/Http/Controllers/Admin/BukuController.php>)
+
 Controller ini menangani seluruh fungsi CRUD (*Create, Read, Update, Delete*) data buku:
 
 * **`checkAdmin()`**: Method privat untuk memastikan hanya akun role admin yang dapat mengeksekusi aksi.
@@ -263,15 +270,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 ### D. View / Blade Template (`resources/views/`)
 
-* **[resources/views/admin/buku/index.blade.php](file:///d:/Bari/buDinda%20belajar/peminjamanperpus/resources/views/admin/buku/index.blade.php)**: Menampilkan tabel daftar buku, tombol tambah, edit, dan form hapus dengan konfirmasi javascript.
-* **[resources/views/admin/buku/create.blade.php](file:///d:/Bari/buDinda%20belajar/peminjamanperpus/resources/views/admin/buku/create.blade.php)**: Form input penambahan buku baru lengkap dengan pesan error validasi `@error`.
-* **[resources/views/admin/buku/edit.blade.php](file:///d:/Bari/buDinda%20belajar/peminjamanperpus/resources/views/admin/buku/edit.blade.php)**: Form modifikasi data buku dengan metode `@method('PUT')`.
+* **[resources/views/admin/buku/index.blade.php](<file:///d:/Bari/buDinda%20belajar/peminjamanperpus/resources/views/admin/buku/index.blade.php>)**: Menampilkan tabel daftar buku, tombol tambah, edit, dan form hapus dengan konfirmasi javascript.
+* **[resources/views/admin/buku/create.blade.php](<file:///d:/Bari/buDinda%20belajar/peminjamanperpus/resources/views/admin/buku/create.blade.php>)**: Form input penambahan buku baru lengkap dengan pesan error validasi `@error`.
+* **[resources/views/admin/buku/edit.blade.php](<file:///d:/Bari/buDinda%20belajar/peminjamanperpus/resources/views/admin/buku/edit.blade.php>)**: Form modifikasi data buku dengan metode `@method('PUT')`.
 
 ---
 
 ## 7. Siklus Hidup Permintaan (Request Lifecycle)
 
 Contoh: **Admin Menyimpan Buku Baru**
+
 1. Admin mengisi form di `/admin/buku/create` lalu klik **Simpan**.
 2. Browser mengirim data form via HTTP `POST` ke `/admin/buku`.
 3. File `routes/web.php` mencocokkan route dan memanggil `BukuController@store`.
@@ -284,11 +292,11 @@ Contoh: **Admin Menyimpan Buku Baru**
 
 ## 8. Panduan Troubleshooting Masalah Umum
 
-| Gejala Error | Penyebab | Solusi |
-| :--- | :--- | :--- |
-| `SQLSTATE[HY000] [2002] Connection refused` | MySQL XAMPP belum aktif atau port di `.env` salah | Buka XAMPP Control Panel, klik **Start** pada MySQL, dan pastikan `DB_PORT=3307` (atau `3306`) sesuai port MySQL aktif. |
-| `403 This action is unauthorized / Akses ditolak` | Login menggunakan akun role `user` dan mencoba membuka `/admin/*` | Login menggunakan akun role `admin` (`admin@perpus.com`). |
-| `Vite manifest not found` | Aset CSS / JS belum dibundel | Jalankan perintah `npm run build` atau aktifkan `npm run dev`. |
+| Gejala Error                                        | Penyebab                                                             | Solusi                                                                                                                           |
+| :-------------------------------------------------- | :------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------- |
+| `SQLSTATE[HY000] [2002] Connection refused`       | MySQL XAMPP belum aktif atau port di`.env` salah                   | Buka XAMPP Control Panel, klik**Start** pada MySQL, dan pastikan `DB_PORT=3307` (atau `3306`) sesuai port MySQL aktif. |
+| `403 This action is unauthorized / Akses ditolak` | Login menggunakan akun role`user` dan mencoba membuka `/admin/*` | Login menggunakan akun role`admin` (`admin@perpus.com`).                                                                     |
+| `Vite manifest not found`                         | Aset CSS / JS belum dibundel                                         | Jalankan perintah`npm run build` atau aktifkan `npm run dev`.                                                                |
 
 ---
 
@@ -296,7 +304,7 @@ Contoh: **Admin Menyimpan Buku Baru**
 
 Akun berikut tersedia secara bawaan dari Database Seeder:
 
-| Akun | Email | Password | Role | Akses Halaman |
-| :--- | :--- | :--- | :--- | :--- |
-| **Administrator** | `admin@perpus.com` | `password123` | `admin` | Dashboard Admin & CRUD Buku (`/admin/buku`) |
-| **Siswa / Anggota** | `siswa@perpus.com` | `password123` | `user` | Dashboard Siswa (`/dashboard`) |
+| Akun                      | Email                | Password        | Role      | Akses Halaman                                 |
+| :------------------------ | :------------------- | :-------------- | :-------- | :-------------------------------------------- |
+| **Administrator**   | `admin@perpus.com` | `password123` | `admin` | Dashboard Admin & CRUD Buku (`/admin/buku`) |
+| **Siswa / Anggota** | `siswa@perpus.com` | `password123` | `user`  | Dashboard Siswa (`/dashboard`)              |

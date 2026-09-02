@@ -7,19 +7,29 @@ use App\Models\User;
 use App\Models\Buku;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * DatabaseSeeder
+ * 
+ * Mengisi data awal secara otomatis ke dalam database saat perintah
+ * 'php artisan db:seed' atau 'php artisan migrate --seed' dijalankan.
+ */
 class DatabaseSeeder extends Seeder
 {
+    /**
+     * Method run():
+     * Titik eksekusi utama seeder untuk membuat data dummy/awal.
+     */
     public function run(): void
     {
-        // 1. Buat Akun Admin
+        // 1. Membuat Akun Pengujian Administrator
         User::create([
             'name' => 'Administrator Perpus',
             'email' => 'admin@perpus.com',
-            'password' => Hash::make('password123'),
+            'password' => Hash::make('password123'), // Mengenkripsi password menggunakan Hash Bcrypt
             'role' => 'admin',
         ]);
 
-        // 2. Buat Akun Siswa / User
+        // 2. Membuat Akun Pengujian Siswa / Anggota Biasa
         User::create([
             'name' => 'Siswa Teladan',
             'email' => 'siswa@perpus.com',
@@ -27,7 +37,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'user',
         ]);
 
-        // 3. Buat Contoh Data Buku Awal
+        // 3. Mengisi Contoh Data Master Buku Awal
         Buku::create([
             'kode_buku' => 'BK-001',
             'judul' => 'Pemrograman Web Laravel Dasar',
