@@ -4,37 +4,28 @@ Aplikasi web manajemen peminjaman buku perpustakaan digital yang dibangun menggu
 
 ---
 
-## 💻 Spesifikasi Perangkat & Environment Pengembangan
+## 🛠️ Tech Stack & Kebutuhan Lingkungan (Environment)
 
-Project ini dikembangkan dan diuji pada perangkat dengan spesifikasi berikut:
+Project ini dibangun dengan spesifikasi teknologi berikut:
 
-### 🖥️ Spesifikasi Perangkat Keras (Laptop)
-| Komponen | Spesifikasi |
-| :--- | :--- |
-| **Model Perangkat** | HP Pavilion Gaming Laptop 15-dk2xxx |
-| **Processor** | 11th Gen Intel(R) Core(TM) i5-11300H @ 3.10GHz (4 Cores, 8 Threads) |
-| **RAM** | 16 GB DDR4 |
-| **Sistem Operasi** | Windows 11 Home Single Language (64-bit) |
-
-### 🛠️ Spesifikasi Perangkat Lunak & Tech Stack
-| Tool / Stack | Versi yang Digunakan |
+| Tool / Stack | Keterangan / Versi |
 | :--- | :--- |
 | **Framework** | Laravel 11.x |
-| **PHP** | PHP 8.2+ (Teruji pada PHP 8.5.4) |
-| **Package Manager (PHP)** | Composer 2.9+ |
-| **Runtime (JS)** | Node.js v24.x & npm |
-| **Database Server** | MySQL / MariaDB (XAMPP - Port 3307 / Default 3306) |
-| **Build Tool & Styling** | Vite & Tailwind CSS |
+| **PHP** | PHP >= 8.2 |
+| **Package Manager** | Composer 2.x |
+| **Frontend & Assets** | Vite & Tailwind CSS |
+| **Runtime JS** | Node.js (>= 18.x) & npm |
+| **Database** | MySQL / MariaDB (via XAMPP / Laragon) |
 
 ---
 
 ## 📋 Persyaratan Sistem Minimum
 
-Sebelum menjalankan project, pastikan perangkat Anda memiliki:
-- PHP >= 8.2 (dengan ekstensi `pdo_mysql`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`, `bcmath`)
-- Composer >= 2.x
-- Node.js >= 18.x & npm
-- MySQL / MariaDB Server (misal via XAMPP atau Laragon)
+Sebelum menjalankan project, pastikan di komputer Anda sudah terpasang:
+- **PHP** >= 8.2 (dengan ekstensi `pdo_mysql`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`, `bcmath`)
+- **Composer** >= 2.x
+- **Node.js** >= 18.x & **npm**
+- **MySQL / MariaDB Server** (misal via XAMPP)
 - Web Browser modern (Google Chrome, Microsoft Edge, Firefox, dll)
 
 ---
@@ -54,7 +45,7 @@ cd peminjamanperpus
 composer install
 ```
 
-### 3. Install Dependensi JavaScript (NPM)
+### 3. Install Dependensi Frontend (NPM)
 ```bash
 npm install
 ```
@@ -65,7 +56,7 @@ Salin file `.env.example` menjadi `.env`:
 # Windows (PowerShell / CMD)
 copy .env.example .env
 
-# Atau Linux / Git Bash
+# Atau Linux / macOS / Git Bash
 cp .env.example .env
 ```
 
@@ -73,7 +64,7 @@ Buka file `.env` dan sesuaikan pengaturan database sesuai konfigurasi MySQL di k
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
-DB_PORT=3307          # Ubah ke 3306 jika menggunakan port default XAMPP
+DB_PORT=3307          # Ubah ke 3306 jika menggunakan port default MySQL/XAMPP
 DB_DATABASE=db_perpus_digital
 DB_USERNAME=root
 DB_PASSWORD=
@@ -96,7 +87,7 @@ php artisan migrate --seed
 ```
 
 ### 7. Jalankan Server Pengembangan
-Jalankan backend Laravel dan aset frontend Vite di dua terminal terpisah:
+Jalankan backend Laravel dan frontend Vite di dua terminal terpisah:
 
 **Terminal 1 (Laravel Server):**
 ```bash
@@ -122,7 +113,7 @@ Setelah kedua server berjalan, buka browser dan akses tautan berikut:
 - 🔐 **Autentikasi Pengguna**: Registrasi akun, Login, dan Logout.
 - 📖 **Manajemen Buku (CRUD)**: Tambah data buku, edit, hapus, dan lihat katalog.
 - 📑 **Peminjaman & Pengembalian**: Transaksi peminjaman buku perpustakaan.
-- 👤 **Profil Pengguna**: Manajemen data profil dan password akun.
+- 👤 **Profil Pengguna**: Manajemen data profil dan ubah kata sandi.
 - 📱 **Responsif & Modern**: Tampilan antarmuka bersih menggunakan Tailwind CSS.
 
 ---
