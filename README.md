@@ -2,21 +2,18 @@
 
 Aplikasi web manajemen perpustakaan modern berbasis **Laravel 11/12** dan **MySQL** yang dirancang untuk mengotomatisasi proses pengelolaan data master buku serta transaksi peminjaman dan pengembalian buku secara mandiri oleh siswa.
 
-Proyek ini dibangun berdasarkan spesifikasi teknis dan studi kasus **UKK Paket 4**, mengacu pada 3 dokumen panduan utama:
-1. `MODUL 1. PERSIAPAN, DATABASE, DAN LOGIN.pdf`
-2. `CRUD Buku.pdf`
-3. `Siswa katalog dan pinjam.docx`
-
 ---
 
 ## ✨ Fitur Utama (Key Features)
 
 ### 🔐 1. Sistem Autentikasi & Multi-Role Access
+
 * **Role-Based Redirection**: Pengalihan otomatis saat login; akun **Admin** langsung diarahkan ke `/admin/dashboard`, sedangkan akun **Siswa/User** diarahkan ke katalog `/dashboard`.
 * **Registrasi Mandiri Siswa**: Form register publik otomatis memberikan role `user` bagi pendaftar baru tanpa celah eskalasi hak akses.
 * **Proteksi Hak Akses (Middleware)**: Rute administratif (`/admin/*`) dilindungi dengan verifikasi status login dan pengecekan otorisasi role (`403 Akses Ditolak` bagi non-admin).
 
 ### 🛠️ 2. Modul Petugas / Administrator
+
 * **Dashboard Admin**: Ringkasan status dan panel kendali operasional perpustakaan.
 * **Manajemen Master Data Buku (CRUD)**:
   * **Tambah Buku Baru**: Form penambahan buku dengan validasi kode buku unik (`kode_buku`), judul, pengarang, penerbit, dan stok awal.
@@ -25,6 +22,7 @@ Proyek ini dibangun berdasarkan spesifikasi teknis dan studi kasus **UKK Paket 4
   * **Hapus Buku**: Penghapusan data buku dengan konfirmasi keamanan.
 
 ### 📖 3. Modul Siswa / Anggota
+
 * **Katalog Buku Interaktif**: Menampilkan seluruh koleksi buku yang tersedia (hanya buku dengan `stok > 0` yang dapat dipinjam).
 * **Peminjaman Buku Mandiri**:
   * Pengajuan peminjaman langsung dari katalog dalam 1 kali klik.
@@ -36,6 +34,7 @@ Proyek ini dibangun berdasarkan spesifikasi teknis dan studi kasus **UKK Paket 4
 * **Pengembalian Mandiri**: Siswa dapat memproses pengembalian buku yang sedang dipinjam secara langsung, dan sistem otomatis mengembalikan kuota stok buku (`increment`).
 
 ### 📱 4. Navigasi Cerdas & Responsif
+
 * Header dan menu navigasi (desktop & mobile) otomatis menyesuaikan menu yang tampil sesuai role pengguna yang sedang login.
 
 ---
@@ -89,30 +88,38 @@ Database: **`db_perpus_digital`**
 ## 🚀 Panduan Instalasi & Menjalankan Aplikasi
 
 ### 1. Prasyarat Sistem
+
 Pastikan di komputer Anda sudah terpasang:
+
 * **PHP >= 8.2**
 * **Composer**
 * **Node.js & NPM**
 * **XAMPP / MySQL Server**
 
 ### 2. Clone atau Buka Direktori Proyek
+
 ```bash
 cd peminjamanperpus
 ```
 
 ### 3. Instal Dependensi Backend & Frontend
+
 ```bash
 composer install
 npm install
 ```
 
 ### 4. Konfigurasi Lingkungan (`.env`)
+
 Salin file `.env.example` menjadi `.env`:
+
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
+
 Pastikan pengaturan koneksi database MySQL pada `.env` sudah sesuai:
+
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -123,36 +130,42 @@ DB_PASSWORD=
 ```
 
 ### 5. Migrasi & Seeder Database
+
 Buat database `db_perpus_digital` di phpMyAdmin / MySQL console, lalu jalankan migrasi beserta data awal:
+
 ```bash
 php artisan migrate --seed
 ```
 
 ### 6. Kompilasi Aset Frontend
+
 ```bash
 npm run build
 ```
 
 ### 7. Jalankan Server Lokal
+
 ```bash
 php artisan serve
 ```
+
 Akses aplikasi melalui browser di: [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
 ---
 
 ## 🔑 Kredensial Akun Pengujian (Default Seed)
 
-| Peran (Role) | Email | Password | Halaman Tujuan Setelah Login |
-| :--- | :--- | :--- | :--- |
+| Peran (Role)            | Email                | Password        | Halaman Tujuan Setelah Login              |
+| :---------------------- | :------------------- | :-------------- | :---------------------------------------- |
 | **Administrator** | `admin@perpus.com` | `password123` | `http://127.0.0.1:8000/admin/dashboard` |
-| **Siswa / User** | `siswa@perpus.com` | `password123` | `http://127.0.0.1:8000/dashboard` |
+| **Siswa / User**  | `siswa@perpus.com` | `password123` | `http://127.0.0.1:8000/dashboard`       |
 
 ---
 
 ## 🧪 Pengujian Otomatis (Automated Tests)
 
 Aplikasi telah dilengkapi unit & feature test komprehensif untuk menguji seluruh alur autentikasi, hak akses, peminjaman siswa, dan CRUD buku admin:
+
 ```bash
 php artisan test --filter SistemPerpusTest
 ```
@@ -167,4 +180,5 @@ Untuk panduan teknis langkah demi langkah, rincian terminal command, dan pembaha
 ---
 
 ## 📄 Lisensi
+
 Aplikasi ini bersifat *open-source* di bawah lisensi [MIT License](LICENSE).
