@@ -172,13 +172,9 @@ php artisan test --filter SistemPerpusTest
 
 ---
 
-## 📖 Dokumentasi Lengkap & Pembahasan Baris Per Baris
+## 📖 Dokumentasi Lengkap & Pembahasan
 
-Untuk panduan teknis langkah demi langkah, rincian terminal command, dan pembahasan kode program secara menyeluruh, silakan baca:
+Untuk panduan teknis langkah demi langkah, rincian terminal command, dan pembahasan kode program secara menyeluruh:
 👉 [**`PEMBAHASAN_FULL.md`**](PEMBAHASAN_FULL.md)
 
 ---
-
-## 📄 Lisensi
-
-Aplikasi ini bersifat *open-source* di bawah lisensi [MIT License](LICENSE).
