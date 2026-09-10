@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Admin\BukuController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Siswa\BukuController as SiswaBukuController;
+use App\Http\Controllers\Siswa\DashboardController as SiswaDashboardController;
+use App\Http\Controllers\Siswa\PeminjamanController as SiswaPeminjamanController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -20,11 +23,26 @@ Route::get('/', function () {
 // 2. Dashboard Siswa / Anggota
 // Middleware 'auth': Hanya pengguna yang sudah login yang diizinkan masuk
 // Middleware 'verified': Pengguna harus sudah verifikasi email jika diaktifkan
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [SiswaDashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
-// 3. Grup Rute Khusus Administrator
+// 3. Grup Rute Siswa / Anggota (Katalog Buku & Transaksi Peminjaman)
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Katalog Buku untuk Siswa (Melihat daftar buku & pencarian)
+    Route::get('/buku', [SiswaBukuController::class, 'index'])->name('siswa.buku.index');
+
+    // Riwayat Peminjaman Siswa
+    Route::get('/peminjaman', [SiswaPeminjamanController::class, 'index'])->name('siswa.peminjaman.index');
+
+    // Proses Peminjaman Buku Baru
+    Route::post('/peminjaman', [SiswaPeminjamanController::class, 'store'])->name('siswa.peminjaman.store');
+
+    // Proses Pengembalian Buku yang Sedang Dipinjam
+    Route::patch('/peminjaman/{peminjaman}/kembalikan', [SiswaPeminjamanController::class, 'kembalikan'])->name('siswa.peminjaman.kembalikan');
+});
+
+// 4. Grup Rute Khusus Administrator
 // Mengelompokkan route yang membutuhkan login dan hak akses admin
 Route::middleware(['auth', 'verified'])->group(function () {
     // Halaman Dashboard Admin

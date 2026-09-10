@@ -225,9 +225,9 @@ class Peminjaman extends Model
 
 ### B. Controller (`app/Http/Controllers/`)
 
-#### [BukuController.php](<file:///d:/Bari/buDinda%20belajar/peminjamanperpus/app/Http/Controllers/Admin/BukuController.php>)
+#### 1. Controller Admin: [BukuController.php](file:///d:/Bari/buDinda%20belajar/peminjamanperpus/app/Http/Controllers/Admin/BukuController.php)
 
-Controller ini menangani seluruh fungsi CRUD (*Create, Read, Update, Delete*) data buku:
+Controller ini menangani seluruh fungsi CRUD (*Create, Read, Update, Delete*) data master buku oleh petugas perpustakaan:
 
 * **`checkAdmin()`**: Method privat untuk memastikan hanya akun role admin yang dapat mengeksekusi aksi.
 * **`index()`**: Mengambil semua koleksi buku dengan `Buku::all()` dan mengirimkannya ke view `admin.buku.index`.
@@ -236,6 +236,23 @@ Controller ini menangani seluruh fungsi CRUD (*Create, Read, Update, Delete*) da
 * **`edit(Buku $buku)`**: Menggunakan *Route Model Binding* untuk otomatis mencari buku berdasarkan ID dan menampilkan form edit.
 * **`update(Request $request, Buku $buku)`**: Memvalidasi input dan memperbarui data buku dengan `$buku->update($request->all())`.
 * **`destroy(Buku $buku)`**: Menghapus data buku dari database melalui `$buku->delete()`.
+
+#### 2. Controller Siswa: [DashboardController.php](file:///d:/Bari/buDinda%20belajar/peminjamanperpus/app/Http/Controllers/Siswa/DashboardController.php)
+
+Menangani halaman utama anggota/siswa:
+* **`index()`**: Mengambil statistik ringkasan (jumlah buku yang sedang dipinjam, buku yang sudah dikembalikan, total buku di perpustakaan) serta daftar transaksi peminjaman aktif siswa (`status = 'dipinjam'`).
+
+#### 3. Controller Siswa: [BukuController.php](file:///d:/Bari/buDinda%20belajar/peminjamanperpus/app/Http/Controllers/Siswa/BukuController.php)
+
+Menangani katalog buku digital untuk siswa:
+* **`index(Request $request)`**: Mengambil daftar buku yang tersedia dengan dukungan filter pencarian (`search`), serta menandai buku-buku yang sedang dipinjam oleh siswa aktif agar tidak dipinjam ganda.
+
+#### 4. Controller Siswa: [PeminjamanController.php](file:///d:/Bari/buDinda%20belajar/peminjamanperpus/app/Http/Controllers/Siswa/PeminjamanController.php)
+
+Menangani transaksi peminjaman dan pengembalian buku:
+* **`index()`**: Menampilkan seluruh riwayat transaksi peminjaman milik siswa yang sedang login.
+* **`store(Request $request)`**: Memvalidasi ketersediaan stok buku, mencegah peminjaman buku yang sama jika belum dikembalikan, mencatat transaksi ke tabel `peminjamans`, dan mengurangi stok buku (`$buku->decrement('stok')`).
+* **`kembalikan(Peminjaman $peminjaman)`**: Memverifikasi hak akses siswa atas transaksi, mengubah status peminjaman menjadi `'dikembalikan'`, mencatat tanggal pengembalian, dan mengembalikan stok buku (`$buku->increment('stok')`).
 
 ---
 
@@ -247,10 +264,25 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Dashboard User Biasa / Siswa
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Dashboard Siswa / Anggota (Dilengkapi Statistik & Peminjaman Aktif)
+Route::get('/dashboard', [SiswaDashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+
+// Grup Halaman Siswa / Anggota
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Katalog Buku Siswa (Pencarian & Status Stok)
+    Route::get('/buku', [SiswaBukuController::class, 'index'])->name('siswa.buku.index');
+
+    // Riwayat Peminjaman Siswa
+    Route::get('/peminjaman', [SiswaPeminjamanController::class, 'index'])->name('siswa.peminjaman.index');
+
+    // Proses Peminjaman Buku Baru
+    Route::post('/peminjaman', [SiswaPeminjamanController::class, 'store'])->name('siswa.peminjaman.store');
+
+    // Proses Pengembalian Buku
+    Route::patch('/peminjaman/{peminjaman}/kembalikan', [SiswaPeminjamanController::class, 'kembalikan'])->name('siswa.peminjaman.kembalikan');
+});
 
 // Grup Halaman Admin (Dilindungi Auth & Pengecekan Role)
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -270,16 +302,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 ### D. View / Blade Template (`resources/views/`)
 
-* **[resources/views/admin/buku/index.blade.php](<file:///d:/Bari/buDinda%20belajar/peminjamanperpus/resources/views/admin/buku/index.blade.php>)**: Menampilkan tabel daftar buku, tombol tambah, edit, dan form hapus dengan konfirmasi javascript.
-* **[resources/views/admin/buku/create.blade.php](<file:///d:/Bari/buDinda%20belajar/peminjamanperpus/resources/views/admin/buku/create.blade.php>)**: Form input penambahan buku baru lengkap dengan pesan error validasi `@error`.
-* **[resources/views/admin/buku/edit.blade.php](<file:///d:/Bari/buDinda%20belajar/peminjamanperpus/resources/views/admin/buku/edit.blade.php>)**: Form modifikasi data buku dengan metode `@method('PUT')`.
+* **Admin - Kelola Buku**:
+  - `admin/buku/index.blade.php`: Tabel daftar master buku, tombol tambah, edit, dan hapus.
+  - `admin/buku/create.blade.php`: Form penambahan buku baru dengan validasi error.
+  - `admin/buku/edit.blade.php`: Form pengeditan buku dengan metode `@method('PUT')`.
+* **Siswa - Dashboard & Transaksi**:
+  - `dashboard.blade.php`: Kartu statistik peminjaman siswa dan tabel buku aktif yang sedang dipinjam beserta tombol kembalikan.
+  - `siswa/buku/index.blade.php`: Katalog buku dengan fitur pencarian, status ketersediaan stok, dan tombol form peminjaman.
+  - `siswa/peminjaman/index.blade.php`: Riwayat seluruh peminjaman siswa lengkap dengan status badge (Dipinjam / Dikembalikan).
+* **Navigasi Utama**:
+  - `layouts/navigation.blade.php`: Menu navbar dinamis yang menyesuaikan role (Admin: Dashboard Admin & Kelola Buku; Siswa: Dashboard, Katalog Buku, Peminjaman Saya).
 
 ---
 
 ## 7. Siklus Hidup Permintaan (Request Lifecycle)
 
-Contoh: **Admin Menyimpan Buku Baru**
-
+### Contoh 1: Admin Menyimpan Buku Baru
 1. Admin mengisi form di `/admin/buku/create` lalu klik **Simpan**.
 2. Browser mengirim data form via HTTP `POST` ke `/admin/buku`.
 3. File `routes/web.php` mencocokkan route dan memanggil `BukuController@store`.
@@ -287,6 +325,22 @@ Contoh: **Admin Menyimpan Buku Baru**
 5. Model `Buku` mengeksekusi query SQL `INSERT INTO bukus (...) VALUES (...)` ke MySQL.
 6. Controller mengembalikan response `redirect()` ke `/admin/buku` disertai pesan `session('success')`.
 7. Browser memuat kembali tabel buku dan menampilkan banner hijau tanda sukses.
+
+### Contoh 2: Siswa Meminjam Buku dari Katalog
+1. Siswa membuka menu **Katalog Buku** (`/buku`) dan memilih buku yang ingin dipinjam.
+2. Siswa mengklik tombol **Pinjam Buku**, form mengirim HTTP `POST` ke `/peminjaman` membawa `buku_id`.
+3. `PeminjamanController@store` memeriksa ketersediaan stok buku (`stok > 0`) dan memastikan siswa belum meminjam buku yang sama.
+4. Transaksi dicatat ke tabel `peminjamans` dengan status `'dipinjam'` dan `tanggal_pinjam = today()`.
+5. Stok buku berkurang 1 (`$buku->decrement('stok')`).
+6. Siswa dialihkan ke halaman **Peminjaman Saya** disertai pesan sukses peminjaman.
+
+### Contoh 3: Siswa Mengembalikan Buku
+1. Siswa membuka Dashboard atau menu **Peminjaman Saya**, lalu klik tombol **Kembalikan Buku**.
+2. Form mengirim HTTP `PATCH` ke `/peminjaman/{id}/kembalikan`.
+3. `PeminjamanController@kembalikan` memastikan transaksi milik siswa yang login dan status masih `'dipinjam'`.
+4. Status diperbarui menjadi `'dikembalikan'` dan `tanggal_kembali` diisi tanggal hari ini.
+5. Stok buku di tabel `bukus` bertambah kembali 1 (`$buku->increment('stok')`).
+6. Halaman dimuat ulang disertai notifikasi terima kasih pengembalian buku.
 
 ---
 
